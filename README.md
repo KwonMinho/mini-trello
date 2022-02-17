@@ -15,19 +15,17 @@
 ## 명세 분석
 
 - `draw.io`: 유스케이스 작성할 때 사용
-- `Oven`: 와이어프레임 작성할 때 사용
+- `oven`: 와이어프레임 작성할 때 사용
 
 <br>
 
-# Code style
+# 코드 스타일(Code style)
 
-현재 프로젝트에서 정해진 코드 스타일 방식이 없기 때문에, `구글 자바스크립트 스타일 가이드` 를 참고했습니다.
-
-ref. https://google.github.io/styleguide/jsguide.html
+현재 프로젝트에서 요구된 코드 스타일 방식이 없기 때문에, 가장 대중적인 지침서인 <a ref=" https://google.github.io/styleguide/jsguide.html">`구글 자바스크립트 스타일 가이드`</a> 를 참고했습니다.
 
 <br>
 
-# Git message convention
+# 깃 메시지 컨벤션(Git message convention)
 
 본 프로젝트의 깃 메시지는 다음과 같은 형식으로 작성됩니다.
 
@@ -44,3 +42,22 @@ ref. https://google.github.io/styleguide/jsguide.html
 - `refactor`: 코드 리팩터링 작업
 - `test`: 테스트 코드와 관련된 작업
 - `chore`: 패키지 구조 변경, 파일 이동 등과 관련된 작업
+
+<br>
+
+# 문서 오타 및 내용 수정 요청
+
+프로젝트 문서에서 발견한 오타나 문서에 잘못 기술된 내용이 있다면, 아래에 적힌 방법 중 하나로 요청해주시면 감사하겠습니다.
+
+## 요청 수단
+
+1. alsgh458@gmail.com 이메일로 요청 (이메일 내용은 아래 요청 포멧으로 보내주세요)
+2. git issue로 요청
+
+## 요청 메시지 포멧
+
+```
+[프로젝트에서 문서 경로][수정 혹은 오타 라인][수정 내용]
+
+ex) [/document/설계설명][12라인][잘못된 표현인거 같습니다]
+```
