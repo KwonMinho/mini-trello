@@ -8,6 +8,23 @@
 
 <br>
 
+# 프로젝트 개발 환경
+
+- 개발 언어: JavaScript, TypeScript v4.5.5
+- 실행 환경: Node.js v17.4.0
+- 서버 프레임워크: express v4.17.3
+- 라이브러리: 미정
+- 테스트 프레임워크: 미정
+
+개발 서포트 도구들
+
+```
+nodemon : 서버 코드를 변경 할 때마다 서버를 재시작해주는 모듈
+ts-node : Node.js 상에서 TypeScript Compiler를 통하지 않고도, 직접 TypeScript를 실행시키는 모듈
+```
+
+<br>
+
 # 코드 스타일(Code style)
 
 현재 프로젝트에서 요구된 코드 스타일 방식이 없기 때문에, 가장 대중적인 지침서인 <a ref=" https://google.github.io/styleguide/jsguide.html">`구글 자바스크립트 스타일 가이드`</a> 를 참고했습니다.
