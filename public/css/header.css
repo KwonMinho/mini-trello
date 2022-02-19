@@ -1,0 +1,14 @@
+#navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-blue);
+  height: 55px;
+
+  font-size: larger;
+}
+
+#navbar__title {
+  color: var(--color-white);
+}

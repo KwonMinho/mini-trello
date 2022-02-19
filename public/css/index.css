@@ -1,0 +1,10 @@
+:root {
+  /* color */
+  --color-blue: #0164ff;
+  --color-white: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
