@@ -1,4 +1,11 @@
-import express, { Request, Response, NextFunction, Application } from "express";
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  Application,
+  Router,
+} from "express";
+import Controller from "./common/interface/Controller";
 
 /**
  * 이 클래스는 express 기반으로 작성된 애플리케이션 서버 클래스입니다.
@@ -15,18 +22,19 @@ class App {
 
   /**
    * @description: 애플리케이션 서버 인스턴스를 생성하고, 해당 서버에 필요한 미들웨어, 컨트롤러, 에러 핸들러 등을 설정
-   * @param {Function[]} controllers 애플리케이션 서버에 추가할 컨트롤러 리스트
+   * @param {Controller[]} controllers 애플리케이션 서버에 추가할 컨트롤러 리스트
    */
-  constructor(controllers: Function[]) {
+  constructor(controllers: Controller[]) {
     this.app = express();
     this.initDefaultMiddlerwares();
+    this.initControllers(controllers);
   }
 
   /**
-   * @description: 애플리케이션 서버를 시작 (default port: 3000)
+   * @description: 애플리케이션 서버를 시작 (default port: 8888)
    */
   public listen(): void {
-    const port: number = Number(process.env.PORT) || 3000;
+    const port: number = Number(process.env.PORT) || 8888;
     this.app.listen(port, () => {
       console.log(`App listening on the port ${port}`);
     });
@@ -48,8 +56,27 @@ class App {
     this.app.use(express.static(`${__dirname}/../public`));
   }
 
-  private initErrorHandler(): void {}
-  private initControllers(controllers: Function[]): void {}
+  /**
+   * @description: 애플리케이션 서버에 필요한 view 컨트롤러와 API 컨트롤러들 설정
+   * @param {Function[]} controllers 애플리케이션 서버에 추가할 컨트롤러 리스트
+   */
+  private initControllers(controllers: Controller[]): void {
+    const router: Router = Router();
+
+    // 사용자 브라우저에서 실행할 애플리케이션 반환
+    router.get("/", (req: Request, res: Response) => {
+      res.sendFile(`${__dirname}/../public/index.html`);
+    });
+
+    // API 컨트롤러들 라우터에 설정
+    controllers.forEach((controller: Controller) => {
+      router.use(controller.getRouter());
+    });
+
+    this.app.use("/api", router);
+  }
+
+  //private initErrorHandler(): void {}
 }
 
 export default App;
