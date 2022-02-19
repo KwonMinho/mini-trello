@@ -1,11 +1,5 @@
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  Application,
-  Router,
-} from "express";
-import Controller from "./common/interface/Controller";
+import express, { Request, Response, Application, Router } from "express";
+import Controller from "./common/interface/controller";
 
 /**
  * 이 클래스는 express 기반으로 작성된 애플리케이션 서버 클래스입니다.
