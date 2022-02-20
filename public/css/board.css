@@ -1,0 +1,119 @@
+#board__section {
+  height: 74vh;
+  background-color: var(--color-board);
+
+  padding-top: 100px;
+  padding-left: 100px;
+}
+
+#board {
+  display: flex;
+  height: 300px;
+
+  width: max-content;
+}
+
+/* COMMON */
+.board__item {
+  margin-right: 30px;
+  padding: 10px;
+
+  width: 200px;
+  height: max-content;
+
+  border-radius: 3px;
+
+  background-color: var(--color-list);
+  box-shadow: 5px 5px 5px var(--color-shadow);
+}
+
+.add-item {
+  display: flex;
+  height: 20px;
+
+  /* #input mode#
+  display: flex;
+  flex-direction: column;
+  height: 40px; */
+}
+
+/* delete! */
+.add-item__input {
+  display: flex;
+  flex-direction: column;
+
+  height: 40px;
+  padding: 10px 10px 15px 10px;
+
+  background-color: var(--color-list);
+}
+
+.add-item:hover {
+  background-color: var(--color-hover);
+  cursor: pointer;
+}
+
+.add-item__comment {
+  font-size: medium;
+  margin-left: 10px;
+  margin-top: 1.7px;
+}
+
+.add-item__btn {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.add-item__btnContainer {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.add-item__addBtn {
+  height: 20px;
+  cursor: pointer;
+}
+
+.add-item__cancelBtn {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  border: solid 1px;
+  padding-top: 0px;
+  cursor: pointer;
+}
+
+/* LIST BOX */
+.list__name {
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: var(--color-white);
+
+  margin-top: 10px;
+  padding: 10px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__editBtn {
+  background-color: var(--color-white);
+
+  border: 0;
+
+  cursor: pointer;
+  animation: 3s ease-in 1s;
+}
+
+.card__editBtn:hover {
+  font-size: medium;
+}
+
+.list > hr {
+  margin: 5px 0;
+}

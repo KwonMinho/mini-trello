@@ -2,6 +2,12 @@
   /* color */
   --color-blue: #0164ff;
   --color-white: #fff;
+  --color-hover: #0164ff;
+
+  --color-board: #f5f5f7;
+  --color-list: #d7d4d9;
+
+  --color-shadow: #0f0f0f;
 }
 
 * {
