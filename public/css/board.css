@@ -10,8 +10,9 @@
 
 #board {
   display: flex;
-  height: 300px;
+  flex-direction: row-reverse;
 
+  height: 300px;
   width: max-content;
 }
 
