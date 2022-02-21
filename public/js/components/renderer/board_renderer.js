@@ -18,7 +18,7 @@ export class BoardRenderer extends Renderer {
    */
   __init() {
     const addListItem = this._createAddItem(BoardItemEnum.LIST);
-    this.__render(addListItem);
+    this.__render(addListItem, document.querySelector("#board"));
   }
 
   /**
