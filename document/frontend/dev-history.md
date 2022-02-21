@@ -103,7 +103,7 @@
 
   <div class="add-item">
     <button class="add-item__btn">+</button>
-    <p class="add-item__comment">Add anothescard</p>
+    <p class="add-item__comment">Add anothes card</p>
   </div>
 </div>
 ```

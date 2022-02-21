@@ -17,8 +17,49 @@ export class BoardRenderer extends Renderer {
    * @description: 인스턴스될 때 실행되는 함수
    */
   _init() {
-    const addListItem = this._createAddItem(AddItemEnum.LIST);
+    const addListItem = this._createAddItem(BoardItemEnum.LIST);
     this._render(addListItem);
+  }
+
+  /**
+   * @private
+   * @param {String} title: 리스트 이름
+   * @return {Element} List tag
+   */
+  _createList(title) {
+    const listContainer = document.createElement("div");
+    listContainer.classList.add("list");
+    listContainer.classList.add("board__item");
+
+    const titleContainer = document.createElement("div");
+    titleContainer.classList.add("list__name");
+    const h3 = document.createElement("h3");
+    h3.innerText = title;
+    titleContainer.appendChild(h3);
+
+    const cardsContainer = document.createElement("div");
+    cardsContainer.classList.add("list__items");
+
+    const hr = document.createElement("hr");
+
+    const addCardItem = this._createAddItem(BoardItemEnum.CARD);
+
+    // Assembly elements
+    listContainer.appendChild(titleContainer);
+    listContainer.appendChild(cardsContainer);
+    listContainer.appendChild(hr);
+    listContainer.appendChild(addCardItem);
+
+    return listContainer;
+  }
+
+  _addBoardItem(type, title, base) {
+    if (type === BoardItemEnum.LIST) {
+      const list = this._createList(title);
+      this._render(list);
+    } else {
+      console.log("card");
+    }
   }
 
   /**
@@ -28,14 +69,16 @@ export class BoardRenderer extends Renderer {
    *    <p class="add-item__comment">Add another XXX</p>
    * </div>
    * @private
-   * @description: board 아이템인 "Add-item" 태그를 만들어서 반환하는 함수
-   * @param {AddItemEnum} type: Add item type
+   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
+   * @param {BoardItemEnum} type: AddItem type
+   * @param {element} base: AddItem의 base 태그 (option)
+   * @return {element} addItem tag
    */
-  _createAddItem(type) {
+  _createAddItem(type, base) {
     // Create elements
     const addItem = document.createElement("div");
     addItem.classList.add("add-item");
-    addItem.classList.add("board__item");
+    if (type === BoardItemEnum.LIST) addItem.classList.add("board__item");
 
     const transitionBtn = document.createElement("button");
     transitionBtn.classList.add("add-item__transitionBtn");
@@ -59,15 +102,26 @@ export class BoardRenderer extends Renderer {
     cancelBtn.classList.add("add-item__cancelBtn");
     cancelBtn.innerText = "X";
     cancelBtn.addEventListener("click", this._transitionAddItemMode);
+    btnContainer.appendChild(addBtn);
+    btnContainer.appendChild(cancelBtn);
 
     // When default mode, addItemInput & btnCotainer Invisible
     btnContainer.style.display = "none";
     addItemInput.style.display = "none";
 
-    // Assembly elements
-    btnContainer.appendChild(addBtn);
-    btnContainer.appendChild(cancelBtn);
+    // AddItem event listenr
+    const self = this;
+    addBtn.addEventListener("click", () => {
+      const title = addItemInput.value;
+      if (title === "") {
+        alert("리스트 이름을 입력해주세요!");
+        return;
+      }
+      addItemInput.value = "";
+      self._addBoardItem(type, title, base);
+    });
 
+    // Assembly elements
     addItem.appendChild(transitionBtn);
     addItem.appendChild(comment);
     addItem.appendChild(addItemInput);
@@ -105,13 +159,10 @@ export class BoardRenderer extends Renderer {
       }
     });
   }
-
-  addList(e) {
-    console.log(e);
-  }
 }
 
-const AddItemEnum = {
+///
+const BoardItemEnum = {
   LIST: "List",
   CARD: "Card",
 };
