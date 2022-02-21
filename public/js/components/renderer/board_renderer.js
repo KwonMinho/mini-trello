@@ -23,7 +23,7 @@ export class BoardRenderer extends Renderer {
 
   /**
    * @private
-   * @description boardItem(List or Card)를 board에 생성해서 조립하는 함수
+   * @description: boardItem(List or Card)를 board에 생성해서 조립하는 함수
    * @param {BoardItemEnum} type: boardItem 타입
    * @param {String} content: addItem에 입력된 아이템 타이틀
    * @param {Element} listItem: 카드 추가 이벤트가 발생된 List 아이템 (option)
@@ -42,8 +42,9 @@ export class BoardRenderer extends Renderer {
 
   /**
    * @private
+   * @description: board 아이템인 "List" 태그를 만들어서 반환하는 함수
    * @param {String} title: 리스트 이름
-   * @return {Element} List tag
+   * @return {Element} List item tag
    */
   _createList(title) {
     const listContainer = document.createElement("div");
@@ -74,9 +75,8 @@ export class BoardRenderer extends Renderer {
 
   /**
    * @private
-   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
-   * @param {BoardItemEnum} type: AddItem type
-   * @return {element} addItem tag
+   * @description: Card 아이템 이동을 위한 "Dropzone" 태그를 만들어서 반환하는 함수
+   * @return {element} dropzone 태그
    */
   _createCardDropzone() {
     const dropzone = document.createElement("div");
@@ -86,17 +86,17 @@ export class BoardRenderer extends Renderer {
 
   /**
    * @private
-   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
-   * @param {BoardItemEnum} type: AddItem type
-   * @return {element} addItem tag
+   * @description: board 아이템인 "Card" 태그를 만들어서 반환하는 함수
+   * @param {String} content: Card Item의 내용
+   * @return {element} Card item tag
    */
-  _createCard(title) {
+  _createCard(content) {
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("card");
 
     const cardContent = document.createElement("div");
     cardContent.classList.add("card__content");
-    cardContent.innerText = title;
+    cardContent.innerText = content;
     const cardEditBtn = document.createElement("button");
     cardEditBtn.classList.add("card__editBtn");
 
