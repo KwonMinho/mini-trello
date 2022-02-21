@@ -160,7 +160,7 @@ export class BoardRenderer extends Renderer {
     addBtn.addEventListener("click", () => {
       const title = addItemInput.value;
       if (title === "") {
-        alert(`${type} 이름을 입력해주세요!`);
+        alert(`${BoardItemNameKor[type.toUpperCase()]} 이름을 입력해주세요!`);
         return;
       }
       addItemInput.value = "";
@@ -214,6 +214,15 @@ export class BoardRenderer extends Renderer {
 const BoardItemEnum = {
   LIST: "List",
   CARD: "Card",
+};
+
+/**
+ * @enum
+ * @description: boardItem의 타입을 한국어로 변환해주는 enum
+ */
+const BoardItemNameKor = {
+  LIST: "리스트",
+  CARD: "TO-DO 카드",
 };
 
 /**
