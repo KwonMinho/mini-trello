@@ -1,8 +1,8 @@
 import { Renderer } from "./renderer.js";
 
 /**
- * 이 클래스는 View-Renderer 컴포넌트입니다.
- * 해당 클래스에서는 State-Storage와 브라우저 앱 UI 사이에서 상호작용하여, board와 관련된 태그를 조립하는 역할입니다.
+ * 이 클래스는 Board-Renderer 컴포넌트입니다.
+ * 해당 클래스에서는 State-Storage와 브라우저 앱 UI 사이에서 상호작용하여, board와 관련된 태그 아이템를 생성하고 조립하는 역할입니다.
  *
  * @class ViewRenderer
  * @version 1.0.0
@@ -13,12 +13,31 @@ import { Renderer } from "./renderer.js";
 export class BoardRenderer extends Renderer {
   /**
    * @override
-   * @private
-   * @description: 인스턴스될 때 실행되는 함수
+   * @protected
+   * @description: board 인스턴스될 때 실행되는 함수
    */
-  _init() {
+  __init() {
     const addListItem = this._createAddItem(BoardItemEnum.LIST);
-    this._render(addListItem);
+    this.__render(addListItem);
+  }
+
+  /**
+   * @private
+   * @description boardItem(List or Card)를 board에 생성해서 조립하는 함수
+   * @param {BoardItemEnum} type: boardItem 타입
+   * @param {String} content: addItem에 입력된 아이템 타이틀
+   * @param {Element} listItem: 카드 추가 이벤트가 발생된 List 아이템 (option)
+   */
+  _addBoardItem(type, content, listItem) {
+    if (type === BoardItemEnum.LIST) {
+      const list = this._createList(content);
+      this.__render(list);
+    } else {
+      const card = this._createCard(content);
+      const cardDropzone = this._createCardDropzone();
+      this.__render(card, listItem);
+      this.__render(cardDropzone, listItem);
+    }
   }
 
   /**
@@ -42,7 +61,7 @@ export class BoardRenderer extends Renderer {
 
     const hr = document.createElement("hr");
 
-    const addCardItem = this._createAddItem(BoardItemEnum.CARD);
+    const addCardItem = this._createAddItem(BoardItemEnum.CARD, cardsContainer);
 
     // Assembly elements
     listContainer.appendChild(titleContainer);
@@ -53,57 +72,84 @@ export class BoardRenderer extends Renderer {
     return listContainer;
   }
 
-  _addBoardItem(type, title, base) {
-    if (type === BoardItemEnum.LIST) {
-      const list = this._createList(title);
-      this._render(list);
-    } else {
-      console.log("card");
-    }
-  }
-
   /**
-   * [반환되는 "Add-item"태그]
-   *  <div class="add-item board__item">
-   *     <button class="add-item__btn">+</button>
-   *    <p class="add-item__comment">Add another XXX</p>
-   * </div>
    * @private
    * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
    * @param {BoardItemEnum} type: AddItem type
-   * @param {element} base: AddItem의 base 태그 (option)
    * @return {element} addItem tag
    */
-  _createAddItem(type, base) {
+  _createCardDropzone() {
+    const dropzone = document.createElement("div");
+    dropzone.classList.add("card__dropzone");
+    return dropzone;
+  }
+
+  /**
+   * @private
+   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
+   * @param {BoardItemEnum} type: AddItem type
+   * @return {element} addItem tag
+   */
+  _createCard(title) {
+    const cardContainer = document.createElement("div");
+    cardContainer.classList.add("card");
+
+    const cardContent = document.createElement("div");
+    cardContent.classList.add("card__content");
+    cardContent.innerText = title;
+    const cardEditBtn = document.createElement("button");
+    cardEditBtn.classList.add("card__editBtn");
+
+    const cardEditIcon = document.createElement("i");
+    cardEditIcon.classList.add("fa");
+    cardEditIcon.classList.add("fa-pen");
+
+    cardEditBtn.appendChild(cardEditIcon);
+    cardContainer.appendChild(cardContent);
+    cardContainer.appendChild(cardEditBtn);
+
+    return cardContainer;
+  }
+
+  /**
+   * @private
+   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
+   * @param {BoardItemEnum} type: AddItem type
+   * @return {element} addItem tag
+   */
+  _createAddItem(type, replaceBase) {
     // Create elements
     const addItem = document.createElement("div");
     addItem.classList.add("add-item");
     if (type === BoardItemEnum.LIST) addItem.classList.add("board__item");
 
     const transitionBtn = document.createElement("button");
-    transitionBtn.classList.add("add-item__transitionBtn");
-    transitionBtn.innerText = "+";
-    transitionBtn.addEventListener("click", this._transitionAddItemMode);
-
     const comment = document.createElement("p");
+
+    transitionBtn.classList.add("add-item__transitionBtn");
     comment.classList.add("add-item__comment");
+
+    transitionBtn.innerText = "+";
     comment.innerText = `Add another ${type}`;
+
+    transitionBtn.addEventListener("click", this._transitionAddItemMode);
 
     // Tags used in input mode
     const addItemInput = document.createElement("input");
-    addItemInput.placeholder = `Enter ${type} name`;
-
     const btnContainer = document.createElement("div");
-    btnContainer.classList.add("add-item__btnContainer");
     const addBtn = document.createElement("button");
-    addBtn.classList.add("add-item__addBtn");
-    addBtn.innerText = `Add ${type}`;
     const cancelBtn = document.createElement("button");
+
+    btnContainer.classList.add("add-item__btnContainer");
+    addBtn.classList.add("add-item__addBtn");
     cancelBtn.classList.add("add-item__cancelBtn");
+
+    addItemInput.placeholder = `Enter ${type} name`;
+    addBtn.innerText = `Add ${type}`;
     cancelBtn.innerText = "X";
-    cancelBtn.addEventListener("click", this._transitionAddItemMode);
     btnContainer.appendChild(addBtn);
     btnContainer.appendChild(cancelBtn);
+    cancelBtn.addEventListener("click", this._transitionAddItemMode);
 
     // When default mode, addItemInput & btnCotainer Invisible
     btnContainer.style.display = "none";
@@ -114,11 +160,11 @@ export class BoardRenderer extends Renderer {
     addBtn.addEventListener("click", () => {
       const title = addItemInput.value;
       if (title === "") {
-        alert("리스트 이름을 입력해주세요!");
+        alert(`${type} 이름을 입력해주세요!`);
         return;
       }
       addItemInput.value = "";
-      self._addBoardItem(type, title, base);
+      self._addBoardItem(type, title, replaceBase);
     });
 
     // Assembly elements
@@ -161,12 +207,19 @@ export class BoardRenderer extends Renderer {
   }
 }
 
-///
+/**
+ * @enum
+ * @description: boardItem의 타입을 구별하기 위한 enum
+ */
 const BoardItemEnum = {
   LIST: "List",
   CARD: "Card",
 };
 
+/**
+ * @enum
+ * @description: addItem의 디폴트 모드와 입력 모드를 구별하기 위한 enum
+ */
 const AddItemModeEnum = {
   DEFAULT: "add-item",
   INPUT: "add-item__input",

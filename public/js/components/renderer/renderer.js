@@ -1,5 +1,6 @@
 /**
  * 이 클래스는 모든 Renderer의 부모 클래스입니다.
+ * Renderer 클래스는 UI 이벤트를 받아서 태그를 생성하고 베이스 태그에 조립하는 역할을 수행합니다.
  *
  * @class Renderer
  * @field base: 랜더러가 랜더링 작업을 하는 기준 태그
@@ -14,28 +15,23 @@ export class Renderer {
    */
   constructor(base) {
     this.base = base;
-    this._init();
+    this.__init();
   }
 
   /**
+   * @protected
    * @description: 렌더러가 인스턴스될 때 호출되는 함수
    */
-  _init() {}
+  __init() {}
 
   /**
+   * @protected
    * @description: 랜더링 함수
    * @param {Element} tag: 베이스 태그에 조립되어야하는 태그
+   * @param {Element} replaceBase: (option) 설정된 베이스 태그 대신에 사용하는 베이스 태그
    */
-  _render(tag) {
-    this.base.appendChild(tag);
-  }
-
-  /**
-   * @description: 랜더링 함수
-   * @param {Element} replaceBase: 설정된 베이스 태그 대신에 사용하는 베이스 태그
-   * @param {Element} tag: 베이스 태그에 조립되어야하는 태그
-   */
-  _renderer(replaceBase, tag) {
-    replaceBase.appendChild(tag);
+  __render(tag, replaceBase) {
+    if (replaceBase) replaceBase.appendChild(tag);
+    else this.base.appendChild(tag);
   }
 }
