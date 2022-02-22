@@ -74,8 +74,11 @@
 1. html 섹션화
 2. header section 디자인
 3. board section에 board 기초 레이어 잡기
-4. board section에 items들 구성
-5. List 생성하기
+4. board section에 items들 기초 레이어 잡기
+5. 프론트엔드 아키텍처
+6. board_renderer 클래스 생성
+7. addItem, List, Card 추가 기능
+8.
 
 # 컴포넌트 아이템(list, board) 문서
 
@@ -111,10 +114,15 @@
 ## card component
 
 ```html
-<div class="card">
+<div class="card" draggable="true">
   <div class="card__content">Wash</div>
   <button class="card__editBtn"><i class="fa fa-pen"></i></button>
 </div>
+```
+
+## card dropzone
+
+```html
 <div class="card__dropzone"></div>
 ```
 

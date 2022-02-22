@@ -37,20 +37,16 @@
 .add-item {
   display: flex;
   height: 20px;
-
-  /* #input mode#
-  display: flex;
-  flex-direction: column;
-  height: 40px; */
 }
 
-/* delete! */
-.add-item__input {
+.add-item--active {
   display: flex;
   flex-direction: column;
 
   height: 40px;
-  padding: 10px 10px 15px 10px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  /* padding: 10px 10px 15px 10px; */
 
   background-color: var(--color-list);
 }
@@ -66,7 +62,7 @@
   margin-top: 1.7px;
 }
 
-.add-item__transitionBtn {
+.add-item__activeBtn {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -86,7 +82,7 @@
   cursor: pointer;
 }
 
-.add-item__cancelBtn {
+.add-item__inactiveBtn {
   width: 18px;
   height: 18px;
   padding-left: 3px;
@@ -105,7 +101,7 @@
 .card {
   background-color: var(--color-white);
 
-  margin-top: 10px;
+  /* margin-top: 10px; */
   padding: 10px;
 
   display: flex;
@@ -127,4 +123,14 @@
 
 .list > hr {
   margin: 5px 0;
+}
+
+.card__dropzone {
+  height: 10px;
+  transition: background 0.15s, height 0.15s;
+}
+
+.card__dropzone--active {
+  height: 20px;
+  background: var(--color-blue);
 }
