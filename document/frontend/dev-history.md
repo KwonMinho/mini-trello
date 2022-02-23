@@ -57,6 +57,60 @@
 현재 브라우저에서 변경된 상태 저장소를 서버에게 알리거나, 서버에서 저장된 상태를 가져와 상태 저장소를 업데이트하는 역할
 ```
 
+## Event
+
+```
+  static TYPE = {
+    UPDATE_DOM: "update-state",
+    UPDATE_STATE: "update-dom";
+  };
+
+  static MESSAGE_TYPE = {
+    BOARD_INIT: "BOARD#INIT",
+    BOARD_ADD_LIST: "BOARD#ADD_LIST",
+    BOARD_ADD_CARD: "BOARD#ADD_CARD",
+    BOARD_MOVE_CARD: "BOARD#MOVE_CARD",
+  }
+```
+
+### UpdateStateEvent
+
+```
+type: 동작-대상
+payload: 전달한 데이터
+```
+
+```
+type: init-board
+payload: {object} boardstate
+```
+
+```
+type: add-list
+payload: {
+  id, title
+}
+```
+
+```
+type: add-card
+payload: {
+  id, title, rootId
+}
+```
+
+### update-dom
+
+```
+type: add-list, add-card, move-card
+(add-list)
+payload:{title}
+(add-card)
+payload: {title, rootId}
+(move-card)
+payload: {cardId, curListId,, nextListId, afterCardId}
+```
+
 ---
 
 # 성능

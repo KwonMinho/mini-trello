@@ -3,8 +3,8 @@
  * @description: boardItem의 타입을 구별하기 위한 enum
  */
 export const BoardItemEnum = {
-  LIST: "list",
-  CARD: "card",
+  LIST: "LIST",
+  CARD: "CARD",
 };
 
 export function dd() {

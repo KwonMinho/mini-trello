@@ -1,7 +1,6 @@
 import { BoardRenderer } from "./components/renderer/board.renderer.js";
-import { BoardState } from "./components/board.state.js";
+import { StateManger } from "./components/state/state-manger.js";
 
-const boardItemArea = document.querySelector("#board__lists");
-
-new BoardRenderer(boardItemArea);
-new BoardState();
+const boardArea = document.querySelector("#board__lists");
+new BoardRenderer(boardArea);
+new StateManger();

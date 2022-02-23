@@ -61,10 +61,11 @@ export class AddItem {
         return;
       }
       addItemInput.value = "";
-      Event.updateDom(`add-${type}`, {
-        title: title,
-        rootId: rootId,
-      });
+
+      Event.domToState(
+        Event.TYPE.BOARD[`ADD_${type}`],
+        Event.MSG.DOM.addBoardItem(title, rootId)
+      );
     });
 
     return root;

@@ -1,7 +1,7 @@
 import { Renderer } from "./renderer.js";
 import { generateUUID } from "../../common/uuid.js";
 import { BoardItemEnum } from "../../common/enums.js";
-
+import { Event } from "../../common/event.js";
 import { List } from "../../view/list.js";
 import { AddItem } from "../../view/additem.js";
 import { Dropzone } from "../../view/dropzone.js";
@@ -24,26 +24,21 @@ export class BoardRenderer extends Renderer {
    * @description: board 인스턴스될 때 실행되는 함수
    */
   __init() {
-    this.startStateUpdateListener();
+    Event.stateToRendererListener(this.stateEventHandler.bind(this));
   }
 
-  startStateUpdateListener() {
-    const self = this;
-    const board = document.querySelector("#board");
-
-    board.addEventListener("update-state", (event) => {
-      switch (event.detail.type) {
-        case "init":
-          self.initRender(event.detail.payload);
-          break;
-        case "add-list":
-          self.listRender(event.detail.payload);
-          break;
-        case "add-card":
-          self.cardRender(event.detail.payload);
-          break;
-      }
-    });
+  stateEventHandler(event) {
+    switch (event.detail.type) {
+      case Event.TYPE.BOARD.INIT:
+        this.initRender(event.detail.payload);
+        break;
+      case Event.TYPE.BOARD.ADD_LIST:
+        this.listRender(event.detail.payload);
+        break;
+      case Event.TYPE.BOARD.ADD_CARD:
+        this.cardRender(event.detail.payload);
+        break;
+    }
   }
 
   cardRender(info) {
@@ -91,27 +86,5 @@ export class BoardRenderer extends Renderer {
       });
       this.__render(listItem);
     });
-  }
-
-  /**
-   * @private
-   * @description: boardItem(List or Card)를 board에 생성해서 조립하는 함수
-   * @param {BoardItemEnum} type: boardItem 타입
-   * @param {String} content: addItem에 입력된 아이템 타이틀
-   * @param {Element} listItem: 카드 추가 이벤트가 발생된 List 아이템 (option)
-   */
-  _addBoardItem(type, content, listItem) {
-    const uuid = generateUUID();
-
-    if (type === BoardItemEnum.LIST) {
-      const list = this._createList(content, uuid);
-      this.__render(list);
-    } else {
-      const card = this._createCard(content, uuid);
-      const cardDropzone = this._createCardDropzone(uuid);
-
-      this.__render(card, listItem);
-      this.__render(cardDropzone, listItem);
-    }
   }
 }

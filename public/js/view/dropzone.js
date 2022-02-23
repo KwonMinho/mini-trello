@@ -39,12 +39,15 @@ export class Dropzone {
       }
 
       // rootId -- card.id   , newRootId -- RootId에 삽입되어야하는 위치
-      Event.updateDom("move-card", {
-        cardId: cardId,
-        curListId: card.parentNode.parentNode.id,
-        nextListId: root.parentNode.parentNode.id,
-        afterCardId: dropPlaceId,
-      });
+      Event.domToState(
+        Event.TYPE.BOARD.MOVE_CARD,
+        Event.MSG.DOM.moveBoardCard(
+          cardId,
+          card.parentNode.parentNode.id,
+          root.parentNode.parentNode.id,
+          dropPlaceId
+        )
+      );
       root.after(cardDropzone);
       root.after(card);
       //#updatepoint
