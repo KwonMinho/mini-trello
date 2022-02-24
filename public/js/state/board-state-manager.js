@@ -1,18 +1,13 @@
-import { Event } from "../../common/event.js";
-import { generateUUID } from "../../common/uuid.js";
+import { Event } from "../common/event.js";
 
 export class BoardStateManager {
-  constructor() {
-    this.boardState = [];
+  constructor(boardState) {
+    this.boardState = boardState;
+    this.init();
   }
 
-  initState(boardState) {
-    this.boardState = boardState;
+  init() {
     Event.domToStateListener(this.domEventHandler.bind(this));
-    Event.stateToRenderer(
-      Event.TYPE.BOARD.INIT,
-      Event.MSG.STATE.init(this.boardState)
-    );
   }
 
   domEventHandler(event) {
@@ -21,7 +16,7 @@ export class BoardStateManager {
 
     switch (eventType) {
       case Event.TYPE.BOARD.INIT:
-        console.log("board-init-evnet", payload);
+        this.initBoard(payload);
         break;
       case Event.TYPE.BOARD.ADD_LIST:
         this.addList(payload);
@@ -33,12 +28,27 @@ export class BoardStateManager {
         this.moveCard(payload);
         break;
     }
+    console.log(JSON.stringify(this.boardState));
+  }
+
+  initBoard(boardState) {
+    this.boardState.length = 0;
+    this.boardState.splice(0, this.boardState.length);
+
+    for (const list of boardState) {
+      this.boardState.push(list);
+    }
+
+    Event.stateToRenderer(
+      Event.TYPE.BOARD.INIT,
+      Event.MSG.STATE.init(this.boardState)
+    );
   }
 
   /**
-   * @param {object} info {cardId, curListId, nextListId, afterCardId}
+   * @param {object} info {cardId, curListId, nextListId, dropzoneId}
    */
-  moveCard({ cardId, curListId, nextListId, afterCardId }) {
+  moveCard({ cardId, curListId, nextListId, dropzoneId }) {
     const curList = this.boardState[Number(curListId)];
     const curCard = curList.cards.filter((card) => cardId === card.id)[0];
     curList.cards = curList.cards.filter((card) => cardId !== card.id);
@@ -74,19 +84,18 @@ export class BoardStateManager {
   }
 
   /**
-   * @param {object} info {title, rootId}
+   * @param {object} info {id, title, rootId}
    */
-  addCard({ title, rootId }) {
+  addCard({ id, title, rootId }) {
     const list = this.boardState.filter((list) => list.id === rootId)[0];
-    const cardId = generateUUID();
     list.cards.push({
-      id: cardId,
+      id: id,
       title: title,
     });
 
     Event.stateToRenderer(
       Event.TYPE.BOARD.ADD_CARD,
-      Event.MSG.STATE.addCard(cardId, title, rootId)
+      Event.MSG.STATE.addCard(id, title, rootId)
     );
   }
 }

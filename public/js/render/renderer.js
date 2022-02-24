@@ -34,4 +34,18 @@ export class Renderer {
     if (replaceBase) replaceBase.appendChild(tag);
     else this.base.appendChild(tag);
   }
+
+  /**
+   * @protected
+   * @description: 베이스 태그를 초기 상태로 함수
+   */
+  __initBase() {
+    console.log(this.base);
+    console.log("ionit");
+    while (this.base.firstChild) {
+      this.base.firstChild.remove();
+    }
+    console.log(this.base);
+    console.log("dleete ");
+  }
 }

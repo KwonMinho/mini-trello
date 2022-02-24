@@ -4,6 +4,7 @@ import {
   BoardItemNameKor,
 } from "../common/enums.js";
 import { Event } from "../common/event.js";
+import { generateUUID } from "../common/uuid.js";
 
 export class AddItem {
   /**
@@ -64,7 +65,7 @@ export class AddItem {
 
       Event.domToState(
         Event.TYPE.BOARD[`ADD_${type}`],
-        Event.MSG.DOM.addBoardItem(title, rootId)
+        Event.MSG.DOM.addBoardItem(generateUUID(), title, rootId)
       );
     });
 

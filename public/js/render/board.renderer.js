@@ -1,11 +1,11 @@
 import { Renderer } from "./renderer.js";
-import { generateUUID } from "../../common/uuid.js";
-import { BoardItemEnum } from "../../common/enums.js";
-import { Event } from "../../common/event.js";
-import { List } from "../../view/list.js";
-import { AddItem } from "../../view/additem.js";
-import { Dropzone } from "../../view/dropzone.js";
-import { Card } from "../../view/card.js";
+import { generateUUID } from "../common/uuid.js";
+import { BoardItemEnum } from "../common/enums.js";
+import { Event } from "../common/event.js";
+import { List } from "../view/list.js";
+import { AddItem } from "../view/additem.js";
+import { Dropzone } from "../view/dropzone.js";
+import { Card } from "../view/card.js";
 
 /**
  * 이 클래스는 Board-Renderer 컴포넌트입니다.
@@ -24,7 +24,13 @@ export class BoardRenderer extends Renderer {
    * @description: board 인스턴스될 때 실행되는 함수
    */
   __init() {
+    this.boardInitRender();
     Event.stateToRendererListener(this.stateEventHandler.bind(this));
+  }
+
+  boardInitRender() {
+    const addListItem = AddItem.createAddItem(BoardItemEnum.LIST);
+    this.__render(addListItem, document.querySelector("#board"));
   }
 
   stateEventHandler(event) {
@@ -61,13 +67,14 @@ export class BoardRenderer extends Renderer {
   }
 
   /**
+   * @refactory
    * @description: board-state가 초기화될 때 실행되는 렌더링 함수
    * @param {Array} state: board-state에서 가져온 상태
    */
   initRender(state) {
-    const addListItem = AddItem.createAddItem(BoardItemEnum.LIST);
-    this.__render(addListItem, document.querySelector("#board"));
-
+    this.__initBase();
+    console.log("init-render");
+    console.log(state);
     state.forEach((list, id) => {
       const listItem = List.createList(
         id,
