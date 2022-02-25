@@ -1,4 +1,4 @@
-import express, { Request, Response, Application, Router } from "express";
+import express, { Application, Router } from "express";
 import Controller from "./common/interface/controller";
 
 /**
@@ -56,11 +56,6 @@ class App {
    */
   private initControllers(controllers: Controller[]): void {
     const router: Router = Router();
-
-    // 사용자 브라우저에서 실행할 애플리케이션 반환
-    router.get("/", (req: Request, res: Response) => {
-      res.sendFile(`${__dirname}/../public/index.html`);
-    });
 
     // API 컨트롤러들 라우터에 설정
     controllers.forEach((controller: Controller) => {

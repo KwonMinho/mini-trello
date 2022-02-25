@@ -36,18 +36,6 @@ export default class StateService {
     return this.state.version === version;
   }
 
-  getUpdateStateEventHistory() {
-    // V-LIST(1), S-LIST(1) 비교
-    // V-LIST(1) != S-LIST(1) 같지 않으면,
-    // 1. V-LIST(1)을 move에 넣기전에, card에 있다면 해당 card의 정보를 완성해서 move에 옮기기,
-    // 아니라면 그냥 move에 넣기
-    // 2. S-LIST(1)을 card에 넣기 전에, move에 있다면 move 정보완성, 그게아니라면 card에 넣기
-    // 계속 비교
-    // V-LIST > S-LIST
-    // V-LIST 남은 녀석들 하나씩 순회하면서 새로운 리스트에 넣기
-    // 그리고 카드들 순회하면서 move 정보에 있는지 확인, 없다면 그냥 card에 넣기
-  }
-
   updateState(type: string, updated: any) {
     console.log(type, updated);
     switch (type) {
