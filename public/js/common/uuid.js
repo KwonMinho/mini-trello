@@ -1,6 +1,6 @@
 /**
  * @description uuid를 생성하는 함수
- * @return {string} uuid
+ * @returns {string} uuid
  */
 export function generateUUID() {
   var d = new Date().getTime();

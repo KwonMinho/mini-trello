@@ -1,16 +1,25 @@
 import { Event } from "../common/event.js";
 
+/**
+ * 태그 컴포넌트인 dropzone를 생성하기 위한 클래스
+ *
+ * @class Dropzone
+ * @version 1.0.0
+ * @author minho(alsgh458-gmail)
+ * @see None
+ * @since 22.02.24
+ */
 export class Dropzone {
   /**
-   * @description: Card 아이템 이동을 위한 "Dropzone" 태그를 만들어서 반환하는 함수
-   * @param {String} uuid: dropZone 태그의 data-id를 지정할 때 사용되는 uuid
+   * @description: "Dropzone"를 만들어서 반환하는 함수
+   * @param {String} id: dropZone의 data-id를 지정할 때 사용되는 id
    * @return {element} dropZone 태그
    */
-  static createDropzone(uuid) {
+  static createDropzone(id) {
     const root = document.createElement("div");
 
     root.classList.add("card__dropzone");
-    root.dataset.id = uuid + "#dz";
+    root.dataset.id = id + "#dz";
 
     root.addEventListener("dragover", (event) => {
       event.preventDefault();
@@ -26,31 +35,31 @@ export class Dropzone {
      * 2. 아니라면, 현재 dropzone 밑에 drop 카드와 해당 카드의 바로 아래 dropzone 같이 이동시켜줌
      */
     root.addEventListener("drop", (event) => {
+      event.target.classList.remove("card__dropzone--active");
+
       const root = event.target;
       const dropPlaceId = root.dataset.id.replace("#dz", "");
       const cardId = event.dataTransfer.getData("card-id");
       const card = document.querySelector(`[data-id="${cardId}"]`);
       const cardDropzone = document.querySelector(`[data-id="${cardId}#dz"]`);
+      const curListId = card.parentNode.parentNode.id;
+      const curNextListId = root.parentNode.parentNode.id;
 
-      root.classList.remove("card__dropzone--active");
-      // (현재 drop된 컨테이너가 현재 드랍존의 아이디와 같으면 return)
-      if (cardId === dropPlaceId) {
-        return;
-      }
+      // (card가 drop된 곳이 자신의 현재 위치일때)
+      if (cardId === dropPlaceId) return;
 
-      // rootId -- card.id   , newRootId -- RootId에 삽입되어야하는 위치
-      Event.domToState(
+      root.after(cardDropzone);
+      root.after(card);
+
+      Event.changeTag(
         Event.TYPE.BOARD.MOVE_CARD,
-        Event.MSG.DOM.moveBoardCard(
+        Event.PAYLOAD.TAG.moveBoardCard(
           cardId,
-          card.parentNode.parentNode.id,
-          root.parentNode.parentNode.id,
+          curListId,
+          curNextListId,
           dropPlaceId
         )
       );
-      root.after(cardDropzone);
-      root.after(card);
-      //#updatepoint
     });
 
     return root;

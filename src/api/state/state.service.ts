@@ -14,7 +14,7 @@ type List = {
   cards: Card[];
 };
 
-export default class VirtualStateService {
+export default class StateService {
   private state: State;
 
   constructor() {
@@ -33,8 +33,6 @@ export default class VirtualStateService {
   }
 
   isLatestVersion(version: number) {
-    console.log(version);
-    console.log(this.state.version);
     return this.state.version === version;
   }
 
@@ -57,7 +55,7 @@ export default class VirtualStateService {
         this.addBoardList(updated.title);
         break;
       case "BOARD#ADD_CARD":
-        this.addBoardCard(updated.id, updated.title, Number(updated.rootId));
+        this.addBoardCard(updated.id, updated.title, Number(updated.listId));
         break;
       case "BOARD#MOVE_CARD":
         this.moveBoardCard(
@@ -80,8 +78,8 @@ export default class VirtualStateService {
     });
   }
 
-  private addBoardCard(id: string, title: string, rootId: number) {
-    const list = this.state.board.filter((list) => list.id === rootId)[0];
+  private addBoardCard(id: string, title: string, listId: number) {
+    const list = this.state.board.filter((list) => list.id === listId)[0];
     list.cards.push({
       id: id,
       title: title,
@@ -97,8 +95,6 @@ export default class VirtualStateService {
     nextListId: number,
     dropzoneId: string
   ) {
-    console.log(this.state.board);
-
     const curList: List = this.state.board[Number(curListId)];
     const curCard: Card = curList.cards.filter((card) => cardId === card.id)[0];
     curList.cards = curList.cards.filter((card) => cardId !== card.id);

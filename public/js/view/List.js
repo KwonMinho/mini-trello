@@ -1,11 +1,20 @@
+/**
+ * 태그 컴포넌트인 List를 생성하기 위한 클래스
+ *
+ * @class List
+ * @version 1.0.0
+ * @author minho(alsgh458-gmail)
+ * @see None
+ * @since 22.02.24
+ */
 export class List {
   /**
-   * @description: board 아이템인 "List" 태그를 만들어서 반환하는 함수
-   * @param {String} id: List 태그의 id
-   * @param {String} title: 리스트 태그 이름
-   * @param {Element} addCardItem: addItem 태그
-   * @param {Element} cardDropzone: 리스트에 첫번째 card dropzone
-   * @return {Element} List item tag
+   * @description:  "List"를 만들어서 반환하는 함수
+   * @param {String} id: List의 id
+   * @param {String} title: List 이름
+   * @param {element} addCardItem: addItem 태그
+   * @param {element} cardDropzone: 리스트의 첫번째 card dropzone
+   * @return {element} List
    */
   static createList(id, title, addCardItem, cardDropzone) {
     const root = document.createElement("div");

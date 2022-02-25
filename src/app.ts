@@ -3,7 +3,7 @@ import Controller from "./common/interface/controller";
 
 /**
  * 이 클래스는 express 기반으로 작성된 애플리케이션 서버 클래스입니다.
- * 해당 클래스에서는 애플리케이션 서버 생성 및 시작, 미들웨어 및 컨트롤러와 같은 설정 등을 수행합니다.
+ * App은 애플리케이션 서버 생성 및 시작, 미들웨어 및 컨트롤러와 같은 설정 등을 수행합니다.
  *
  * @class App
  * @version 1.0.0
@@ -28,7 +28,7 @@ class App {
    * @description: 애플리케이션 서버를 시작 (default port: 8888)
    */
   public listen(): void {
-    const port: number = Number(process.env.PORT) || 8888;
+    const port: number = Number(process.env.PORT) || 8080;
     this.app.listen(port, () => {
       console.log(`App listening on the port ${port}`);
     });

@@ -1,11 +1,11 @@
 import App from "./app";
-import VirtualStateController from "./api/virtual-state/virtual-state.controller.js";
+import StateController from "./api/state/state.controller.js";
 
 /**
  * @description: 애플리케이션 서버 엔트리 포인트
  */
 async function bootstrapServer() {
-  const app: App = new App([new VirtualStateController()]);
+  const app: App = new App([new StateController()]);
   app.listen();
 }
 

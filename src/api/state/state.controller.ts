@@ -1,12 +1,12 @@
 import { Router, Request, Response } from "express";
 import Controller from "../../common/interface/controller";
-import VirtualStateService from "./virtual-state.service";
+import StateService from "./state.service";
 import { wrap } from "../../lib/request-handler";
 
-export default class VirtualStateController implements Controller {
-  path: string = "/virtual-state";
+export default class StateController implements Controller {
+  path: string = "/state";
   router: Router = Router();
-  virtualStateService: VirtualStateService = new VirtualStateService();
+  stateService: StateService = new StateService();
 
   constructor() {
     this.initalizeRouters();
@@ -36,17 +36,17 @@ export default class VirtualStateController implements Controller {
   }
 
   getCurrentState(req: Request, res: Response): Object {
-    return this.virtualStateService.getCurrentState();
+    return this.stateService.getCurrentState();
   }
 
   getStateVersion(req: Request, res: Response): boolean {
     const { version } = req.query;
     // if (version == undefined) return true;
-    return this.virtualStateService.isLatestVersion(Number(version));
+    return this.stateService.isLatestVersion(Number(version));
   }
 
   updateState(req: Request, res: Response): number {
     const { type, payload } = req.body;
-    return this.virtualStateService.updateState(type, payload);
+    return this.stateService.updateState(type, payload);
   }
 }

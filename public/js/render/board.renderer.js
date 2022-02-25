@@ -1,6 +1,6 @@
 import { Renderer } from "./renderer.js";
 import { generateUUID } from "../common/uuid.js";
-import { BoardItemEnum } from "../common/enums.js";
+import { BoardTagEnum } from "../common/enums.js";
 import { Event } from "../common/event.js";
 import { List } from "../view/list.js";
 import { AddItem } from "../view/additem.js";
@@ -8,8 +8,10 @@ import { Dropzone } from "../view/dropzone.js";
 import { Card } from "../view/card.js";
 
 /**
- * 이 클래스는 Board-Renderer 컴포넌트입니다.
- * 해당 클래스에서는 State-Storage와 브라우저 앱 UI 사이에서 상호작용하여, board와 관련된 태그 아이템를 생성하고 조립하는 역할입니다.
+ * Board-Renderer 서비스 컴포넌트에 대한 클래스
+ *
+ * Board-Renderer는 board와 관련된 태그 컴포넌트를 생성하고 조립하는 역할입니다.(랜더링 작업)
+ * board-state-manager 컴포넌트에서 발생시킨 CHANGE_EVNET를 받을때 랜더링 작업을 수행합니다.
  *
  * @class BoardRenderer
  * @version 1.0.0
@@ -20,78 +22,93 @@ import { Card } from "../view/card.js";
 export class BoardRenderer extends Renderer {
   /**
    * @override
-   * @protected
-   * @description: board 인스턴스될 때 실행되는 함수
+   * @description: 보드 랜더러의 시작 함수
    */
   __init() {
-    this.boardInitRender();
-    Event.stateToRendererListener(this.stateEventHandler.bind(this));
+    this._initRender();
+    Event.changeStateListener(this._changeStateEventHandler.bind(this));
   }
 
-  boardInitRender() {
-    const addListItem = AddItem.createAddItem(BoardItemEnum.LIST);
-    this.__render(addListItem, document.querySelector("#board"));
+  /**
+   * @prviate
+   * @description: 초기 board 섹션에 필요한 태그를 랜더하는 함수
+   */
+  _initRender() {
+    this.__render(
+      AddItem.createAddItem(BoardTagEnum.LIST),
+      document.querySelector("#board")
+    );
   }
 
-  stateEventHandler(event) {
-    switch (event.detail.type) {
+  /**
+   * @private
+   * @description: "CHANGE_STATE" 이벤트에 대한 핸들러 함수
+   * @param {object} event: "CHANGE_STATE" 이벤트 정보가 담긴 객체
+   */
+  _changeStateEventHandler(event) {
+    const type = event.detail.type;
+    const payload = event.detail.payload;
+
+    switch (type) {
       case Event.TYPE.BOARD.INIT:
-        this.initRender(event.detail.payload);
+        this._renderBoard(payload);
         break;
       case Event.TYPE.BOARD.ADD_LIST:
-        this.listRender(event.detail.payload);
+        this._renderList(payload.id, payload.title);
         break;
       case Event.TYPE.BOARD.ADD_CARD:
-        this.cardRender(event.detail.payload);
+        this._renderCard(payload.id, payload.title, payload.listId);
         break;
     }
   }
 
-  cardRender(info) {
-    const cardItem = Card.createCard(info.id, info.title);
-    const cardDropzone = Dropzone.createDropzone(info.id);
-    const list = document.getElementById(`${info.rootId}`);
+  /**
+   * @private
+   * @description: 카드를 랜더링하는 함수
+   * @param {string} id: 카드에 대한 아이디
+   * @param {string} title: 카드에 대한 타이틀
+   * @param {number} listId: 카드에 대한 리스트 태그 아이디
+   */
+  _renderCard(id, title, listId) {
+    const card = Card.createCard(id, title);
+    const cardDropzone = Dropzone.createDropzone(id);
+    const list = document.getElementById(`${listId}`);
     const listCards = list.childNodes[1];
-    this.__render(cardItem, listCards);
+
+    this.__render(card, listCards);
     this.__render(cardDropzone, listCards);
   }
 
-  listRender(info) {
-    const listItem = List.createList(
-      info.id,
-      info.title,
-      AddItem.createAddItem(BoardItemEnum.CARD, info.id),
+  /**
+   * @private
+   * @description: 리스트를 랜더링하는 함수
+   * @param {number} id: 리스트에 대한 태그 아이디
+   * @param {string} title: 리스트에 대한 타이틀
+   */
+  _renderList(id, title) {
+    const list = List.createList(
+      id,
+      title,
+      AddItem.createAddItem(BoardTagEnum.CARD, id),
       Dropzone.createDropzone(generateUUID())
     );
-    this.__render(listItem);
+    this.__render(list);
   }
 
   /**
-   * @refactory
-   * @description: board-state가 초기화될 때 실행되는 렌더링 함수
-   * @param {Array} state: board-state에서 가져온 상태
+   * @private
+   * @description: board 섹션의 상태가 초기화되거나 변경될 때 실행되는 렌더링 함수
+   * @param {object} state: board 섹션의 상태 (board-state-manager에서 관리하는 상태)
    */
-  initRender(state) {
+  _renderBoard(state) {
     this.__initBase();
-    console.log("init-render");
-    console.log(state);
     state.forEach((list, id) => {
-      const listItem = List.createList(
-        id,
-        list.title,
-        AddItem.createAddItem(BoardItemEnum.CARD, id),
-        Dropzone.createDropzone(generateUUID())
-      );
-      const listCards = listItem.childNodes[1];
+      this._renderList(id, list.title);
 
       list.cards.forEach((card) => {
-        const cardItem = Card.createCard(card.id, card.title);
-        const cardDropzone = Dropzone.createDropzone(card.id);
-
-        this.__render(cardItem, listCards);
-        this.__render(cardDropzone, listCards);
+        console.log(card);
+        this._renderCard(card.id, card.title, id);
       });
-      this.__render(listItem);
     });
   }
 }

@@ -1,13 +1,11 @@
 import { BoardRenderer } from "./render/board.renderer.js";
 import { State } from "./state/state.js";
-import { VirtualState } from "./state/virtual-state.js";
+import { VirtualDom } from "./render/virtual-dom.js";
 
-const endpoint = "http://localhost:8888/api/virtual-state";
-const pollingTime = 3000;
-const pollingPath = "/version/";
-const pollingWaitTime = 5000;
-const boardArea = document.querySelector("#board__lists");
-
-new BoardRenderer(boardArea);
+new BoardRenderer({ base: document.querySelector("#board__lists") });
 new State();
-new VirtualState(endpoint, pollingTime, pollingPath);
+new VirtualDom({
+  endpoint: "http://localhost:8080/api/state",
+  pollingTime: 100,
+  pollingPath: "/version",
+});

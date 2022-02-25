@@ -1,17 +1,26 @@
+/**
+ * 태그 컴포넌트인 Card를 생성하기 위한 클래스
+ *
+ * @class Card
+ * @version 1.0.0
+ * @author minho(alsgh458-gmail)
+ * @see None
+ * @since 22.02.24
+ */
 export class Card {
   /**
-   * @description: board 아이템인 "Card" 태그를 만들어서 반환하는 함수
-   * @param {String} uuid: Card 태그의 data-id를 지정할 때 사용되는 uuid
+   * @description: "Card"를 만들어서 반환하는 함수
+   * @param {String} id: Card의 data-id를 지정할 때 사용되는 id
    * @param {String} content: Card Item의 내용
-   * @return {element} Card item tag
+   * @return {element} Card
    */
-  static createCard(uuid, content) {
+  static createCard(id, content) {
     const root = document.createElement("div");
     const cardContent = document.createElement("div");
     const cardEditBtn = document.createElement("button");
     const cardEditIcon = document.createElement("i");
 
-    root.dataset.id = uuid;
+    root.dataset.id = id;
 
     root.classList.add("card");
     cardContent.classList.add("card__content");

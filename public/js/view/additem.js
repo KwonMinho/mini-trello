@@ -1,19 +1,29 @@
 import {
-  BoardItemEnum,
+  BoardTagEnum,
   AddItemModeEnum,
-  BoardItemNameKor,
+  BoardTagNameKor,
 } from "../common/enums.js";
 import { Event } from "../common/event.js";
 import { generateUUID } from "../common/uuid.js";
 
+/**
+ * 태그 컴포넌트인 AddItem를 생성하기 위한 클래스
+ *
+ *
+ * @class AddItem
+ * @version 1.0.0
+ * @author minho(alsgh458-gmail)
+ * @see None
+ * @since 22.02.24
+ */
 export class AddItem {
   /**
-   * @description: board 아이템인 "AddItem" 태그를 만들어서 반환하는 함수
-   * @param {BoardItemEnum} type: AddItem type
-   * @param {number} rootId: (option)카드가 더해지는 리스트 아이디 태그
-   * @return {element} addItem tag
+   * @description: "AddItem"를 만들어서 반환하는 함수
+   * @param {BoardTagEnum} type: AddItem type
+   * @param {number} listId: (option)카드에 대한 리스트의 아이디
+   * @return {element} addItem
    */
-  static createAddItem(type, rootId) {
+  static createAddItem(type, listId) {
     const root = document.createElement("div");
     const activeBtn = document.createElement("button");
     const comment = document.createElement("p");
@@ -23,7 +33,7 @@ export class AddItem {
     const inactiveBtn = document.createElement("button");
 
     root.classList.add("add-item");
-    if (type === BoardItemEnum.LIST) {
+    if (type === BoardTagEnum.LIST) {
       root.classList.add("board__item");
     }
 
@@ -58,14 +68,14 @@ export class AddItem {
     addBtn.addEventListener("click", () => {
       const title = addItemInput.value;
       if (title === "") {
-        alert(`${BoardItemNameKor[type.toUpperCase()]} 이름을 입력해주세요!`);
+        alert(`${BoardTagNameKor[type.toUpperCase()]} 이름을 입력해주세요!`);
         return;
       }
       addItemInput.value = "";
 
-      Event.domToState(
+      Event.changeTag(
         Event.TYPE.BOARD[`ADD_${type}`],
-        Event.MSG.DOM.addBoardItem(generateUUID(), title, rootId)
+        Event.PAYLOAD.TAG.addBoardItem(generateUUID(), title, listId)
       );
     });
 
@@ -73,8 +83,7 @@ export class AddItem {
   }
 
   /**
-   * @description add-item의 모드 상태를 변화시키는 작업을 수행하는 함수 (상태: INACTIVE or ACTIVE)
-   * @callback: in inactiveBtn of AddItem, active of AddItem
+   * @description add-item의 상태 변화 동작 함수 (상태: INACTIVE or ACTIVE)
    * @param {event} event: Click event in window apis
    */
   static _transitionAddItemMode(event) {
