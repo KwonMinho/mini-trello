@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 
 /**
- * @param
+ * @description: 지원하지 않은 path에 대한 에러 페이지를 제공하는 미들웨어
+ * @version 1.0.0
+ * @author minho(alsgh458-gmail)
+ * @see None
+ * @since 22.02.25
  */
 export const notFoundMiddleware = (
   req: Request,
