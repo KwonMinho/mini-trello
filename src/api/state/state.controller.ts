@@ -2,6 +2,10 @@ import { Router, Request, Response } from "express";
 import Controller from "../../common/interface/controller";
 import StateService from "./state.service";
 import { wrap } from "../../lib/request-handler";
+import {
+  validGetVersionRequest,
+  validUpdateStateRequest,
+} from "./state.validation";
 
 /**
  * @
@@ -23,8 +27,16 @@ export default class StateController implements Controller {
 
     router
       .get("/", wrap(this.getCurrentState.bind(this)))
-      .get("/version/", wrap(this.getStateVersion.bind(this)))
-      .post("/", wrap(this.updateState.bind(this)));
+      .get(
+        "/version/",
+        wrap(validGetVersionRequest),
+        wrap(this.getStateVersion.bind(this))
+      )
+      .post(
+        "/",
+        wrap(validUpdateStateRequest),
+        wrap(this.updateState.bind(this))
+      );
 
     this.router.use(this.path, router);
   }
@@ -36,18 +48,19 @@ export default class StateController implements Controller {
     return this.router;
   }
 
-  getCurrentState(req: Request, res: Response): Object {
+  private getCurrentState(req: Request, res: Response): Object {
     return this.stateService.getCurrentState();
   }
 
-  getStateVersion(req: Request, res: Response): boolean {
+  private getStateVersion(req: Request, res: Response): boolean {
     const { version } = req.query;
-    // if (version == undefined) return true;
+
     return this.stateService.isLatestVersion(Number(version));
   }
 
-  updateState(req: Request, res: Response): number {
+  private updateState(req: Request, res: Response): number {
     const { type, payload } = req.body;
+
     return this.stateService.updateState(type, payload);
   }
 }
