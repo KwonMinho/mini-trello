@@ -1,5 +1,12 @@
 import express, { Application, Router } from "express";
 import Controller from "./common/interface/controller";
+import {
+  verifyAATokenMiddleware,
+  notFoundMiddleware,
+  ignoreFaviconMiddleware,
+  exceptionMiddleware,
+} from "./middleware/index";
+import excludePath from "./common/exclude-path";
 
 /**
  * 이 클래스는 express 기반으로 작성된 애플리케이션 서버 클래스입니다.
@@ -15,13 +22,15 @@ class App {
   private app: Application;
 
   /**
-   * @description: 애플리케이션 서버 인스턴스를 생성하고, 해당 서버에 필요한 미들웨어, 컨트롤러, 에러 핸들러 등을 설정
+   * @description: 애플리케이션 서버 인스턴스를 생성하고 해당 서버에 필요한 미들웨어, 컨트롤러, 에러 핸들러 등을 설정
    * @param {Controller[]} controllers 애플리케이션 서버에 추가할 컨트롤러 리스트
    */
   constructor(controllers: Controller[]) {
     this.app = express();
     this.initDefaultMiddlerwares();
     this.initControllers(controllers);
+    this.initNotFoundHandler();
+    this.initExceptionHandler();
   }
 
   /**
@@ -48,6 +57,8 @@ class App {
   private initDefaultMiddlerwares(): void {
     this.app.use(express.json());
     this.app.use(express.static(`${__dirname}/../public`));
+    this.app.use(ignoreFaviconMiddleware);
+    this.app.use(verifyAATokenMiddleware);
   }
 
   /**
@@ -57,7 +68,6 @@ class App {
   private initControllers(controllers: Controller[]): void {
     const router: Router = Router();
 
-    // API 컨트롤러들 라우터에 설정
     controllers.forEach((controller: Controller) => {
       router.use(controller.getRouter());
     });
@@ -65,7 +75,17 @@ class App {
     this.app.use("/api", router);
   }
 
-  //private initErrorHandler(): void {}
+  /**
+   * @description: 애플리케이션 서에 Not Found 미들웨어 설정
+   */
+  private initNotFoundHandler(): void {
+    this.app.use(
+      excludePath(["/api/state", "/api/state/version"], notFoundMiddleware)
+    );
+  }
+  private initExceptionHandler(): void {
+    this.app.use(exceptionMiddleware);
+  }
 }
 
 export default App;
