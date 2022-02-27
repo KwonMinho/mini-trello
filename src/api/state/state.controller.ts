@@ -3,6 +3,9 @@ import Controller from "../../common/interface/controller";
 import StateService from "./state.service";
 import { wrap } from "../../lib/request-handler";
 
+/**
+ * @
+ */
 export default class StateController implements Controller {
   path: string = "/state";
   router: Router = Router();
@@ -11,8 +14,6 @@ export default class StateController implements Controller {
   constructor() {
     this.initalizeRouters();
   }
-  ///
-  /// @ 서버 다시 켜지면서, 서버 런타임 아이디 부여하고 런타임 아이디 맞지 않으면- 콜백시킴
 
   /**
    * @override
