@@ -106,7 +106,6 @@ export class BoardRenderer extends Renderer {
       this._renderList(id, list.title);
 
       list.cards.forEach((card) => {
-        console.log(card);
         this._renderCard(card.id, card.title, id);
       });
     });

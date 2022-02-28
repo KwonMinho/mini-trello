@@ -6,6 +6,6 @@ new BoardRenderer({ base: document.querySelector("#board__lists") });
 new State();
 new VirtualDom({
   endpoint: "http://localhost:8080/api/state",
-  pollingTime: 100,
+  pollingTime: 1000,
   pollingPath: "/version",
 });

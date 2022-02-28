@@ -12,8 +12,10 @@ export const validUpdateStateRequest = (
   const type: string = <string>req.body.type;
   const payload: any = <object>req.body.payload;
 
-  if (typeof payload !== "object")
-    throw new BadRequestException("해당 요청의 payload가 유효하지 않습니다");
+  if (typeof payload !== "object") {
+    next(new BadRequestException("해당 요청의 payload가 유효하지 않습니다"));
+    return;
+  }
 
   let exceptionMsg: string[] = new Array<string>();
 
@@ -47,12 +49,14 @@ export const validUpdateStateRequest = (
         );
       break;
     default:
-      throw new BadRequestException("해당 요청의 타입은 존재하지 않습니다");
+      next(new BadRequestException("해당 요청의 타입은 존재하지 않습니다"));
+      return;
   }
 
-  if (exceptionMsg.length !== 0)
-    throw new BadRequestException(exceptionMsg.toString());
-  console.log(exceptionMsg);
+  if (exceptionMsg.length !== 0) {
+    next(new BadRequestException(exceptionMsg.toString()));
+    return;
+  }
 
   next();
 };
@@ -66,10 +70,13 @@ export const validGetVersionRequest = (
   next: Function
 ): void => {
   const version: string = <string>req.query.version;
-
-  if (!version) throw new BadRequestException("version 값이 존재하지 않습니다");
-  if (isNaN(version as any))
-    throw new BadRequestException("version 값이 유효하지 않습니다");
-
+  if (!version) {
+    next(new BadRequestException("version 값이 존재하지 않습니다"));
+    return;
+  }
+  if (isNaN(version as any)) {
+    next(new BadRequestException("version 값이 유효하지 않습니다"));
+    return;
+  }
   next();
 };
