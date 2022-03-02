@@ -48,11 +48,16 @@ export default class StateLocalRepository implements StateRepository {
       return;
     }
 
-    list.cards.forEach((card, index) => {
+    let index: number = 0;
+    for (const card of list.cards) {
       if (card.id === location) {
         list.cards.splice(index + 1, 0, addCard);
+        return;
       }
-    });
+      index += 1;
+    }
+
+    list.cards.splice(0, 0, addCard);
   }
 
   createList(list: List): void {

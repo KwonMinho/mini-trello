@@ -52,12 +52,10 @@ export const validUpdateStateRequest = (
       next(new BadRequestException("해당 요청의 타입은 존재하지 않습니다"));
       return;
   }
-
   if (exceptionMsg.length !== 0) {
     next(new BadRequestException(exceptionMsg.toString()));
     return;
   }
-
   next();
 };
 

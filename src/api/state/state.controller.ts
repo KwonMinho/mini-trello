@@ -70,7 +70,6 @@ export default class StateController implements Controller {
    */
   private updateState(req: Request, res: Response): number {
     const { type, payload } = req.body;
-
     return this.stateService.updateState(type, payload);
   }
 }

@@ -85,7 +85,6 @@ export class VirtualDom {
 
       // Event.TYPE.BOARD.INIT은 서버로 전달할 필요가 없음
       if (eventType === Event.TYPE.BOARD.INIT) return;
-
       // 서버의 virtual-state로 전달
       Http.post(
         this.endpoint,

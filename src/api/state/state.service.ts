@@ -97,7 +97,7 @@ export default class StateService {
     dropzoneId: string
   ): void {
     const card: Card = this.stateRepository.getBoardCard(curListId, cardId);
-    this.stateRepository.insertBoardCard(nextListId, dropzoneId, card);
     this.stateRepository.deleteCard(curListId, cardId);
+    this.stateRepository.insertBoardCard(nextListId, dropzoneId, card);
   }
 }
