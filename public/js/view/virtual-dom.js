@@ -5,8 +5,8 @@ import { Http } from "../common/http.js";
  * VirtualDom 서비스 컴포넌트에 대한 클래스
  *
  * VirtualDom의 역할은 다음과 같습니다.
- * - 브라우저 애플리케이션의 dom에서 발생한 "CHANGE_TAG" 이벤트를 캐치하고, 이를 서버에 전달하여 virtual state를 업데이트
- * - 지속적으로 서버의 virtual state가 업데이트되었는지 확인하고 virtual state를 가져와, 브라우저 애플리케이션의 상태가 virtual state와 동기화
+ * - 브라우저 애플리케이션의 dom에서 발생한 "CHANGE_TAG" 이벤트를 캐치하고, 이를 서버에 전달하여 서버에서 관리하는 상태를 업데이트
+ * - 지속적으로 서버의 상태가 업데이트되었는지 확인하고 이를 가져와, 브라우저 애플리케이션의 상태와 서버에서 관리하는 상태를 동기화시킨다.
  *
  * @class VirtualDom
  * @version 1.0.0
