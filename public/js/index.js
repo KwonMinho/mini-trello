@@ -1,6 +1,6 @@
 import { BoardRenderer } from "./render/board.renderer.js";
 import { State } from "./state/state.js";
-import { VirtualDom } from "./render/virtual-dom.js";
+import { VirtualDom } from "./view/virtual-dom.js";
 
 new BoardRenderer({ base: document.querySelector("#board__lists") });
 new State();

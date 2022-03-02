@@ -1,12 +1,11 @@
 import express, { Application, Router } from "express";
 import Controller from "./common/interface/controller";
 import {
-  verifyAATokenMiddleware,
   notFoundMiddleware,
   ignoreFaviconMiddleware,
   exceptionMiddleware,
 } from "./middleware/index";
-import excludePath from "./common/exclude-path";
+import excludePath from "./lib/exclude-path";
 
 /**
  * 이 클래스는 express 기반으로 작성된 애플리케이션 서버 클래스입니다.
@@ -58,7 +57,6 @@ class App {
     this.app.use(express.json());
     this.app.use(express.static(`${__dirname}/../public`));
     this.app.use(ignoreFaviconMiddleware);
-    this.app.use(verifyAATokenMiddleware);
   }
 
   /**
@@ -76,13 +74,17 @@ class App {
   }
 
   /**
-   * @description: 애플리케이션 서에 Not Found 미들웨어 설정
+   * @description: Not Found 미들웨어 설정
    */
   private initNotFoundHandler(): void {
     this.app.use(
       excludePath(["/api/state", "/api/state/version"], notFoundMiddleware)
     );
   }
+
+  /**
+   * @description: 서버에서 발생하는 모든 exception을 핸들링하는 미들웨어 설정
+   */
   private initExceptionHandler(): void {
     this.app.use(exceptionMiddleware);
   }
